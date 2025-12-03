@@ -14,7 +14,10 @@ export const FeedInfo: FC = () => {
   const orders: TOrder[] = [];
   const feed = {};
 
-  const readyOrders = getOrders(orders, 'done');
+  const readyOrders = orders
+    .filter((order: TOrder) => order.status === 'done')
+    .slice(0, 20)
+    .map((order: TOrder) => order.number);
 
   const pendingOrders = getOrders(orders, 'pending');
 
