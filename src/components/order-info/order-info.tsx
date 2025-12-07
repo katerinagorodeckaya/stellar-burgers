@@ -46,7 +46,6 @@ export const OrderInfo: FC = () => {
           );
         }
 
-        
         if (!order) {
           const response = await getOrderByNumberApi(parseInt(number));
           if (response.success && response.orders.length > 0) {
@@ -55,7 +54,6 @@ export const OrderInfo: FC = () => {
         }
 
         if (order && ingredients.length > 0) {
-        
           const ingredientsInfo: {
             [key: string]: TIngredient & { count: number };
           } = {};
@@ -73,7 +71,6 @@ export const OrderInfo: FC = () => {
             }
           });
 
-        
           const total = Object.values(ingredientsInfo).reduce(
             (sum: number, item: TIngredient & { count: number }) =>
               sum + item.price * item.count,
@@ -90,7 +87,6 @@ export const OrderInfo: FC = () => {
           setOrderInfo(orderWithInfo);
         }
       } catch (error) {
-        console.error('Ошибка при загрузке заказа:', error);
       } finally {
         setLoading(false);
       }

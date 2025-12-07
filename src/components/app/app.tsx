@@ -28,7 +28,10 @@ const ModalSwitch: FC = () => {
   const background = location.state?.background;
 
   useEffect(() => {
-    dispatch(getUser());
+    const refreshToken = localStorage.getItem('refreshToken');
+    if (refreshToken) {
+      dispatch(getUser());
+    }
   }, [dispatch]);
 
   const handleModalClose = () => {

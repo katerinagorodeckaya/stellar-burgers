@@ -6,7 +6,7 @@ import { TTabMode } from '@utils-types';
 type ConstructorPageUIProps = {
   ingredientsLoading: boolean;
   burgerIngredientsProps: {
-    currentTab: TTabMode; 
+    currentTab: TTabMode;
     buns: any[];
     mains: any[];
     sauces: any[];

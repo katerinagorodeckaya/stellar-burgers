@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
-
 import { BurgerConstructorUI } from '../ui/burger-constructor';
 import { TConstructorIngredient } from '@utils-types';
 import { useNavigate } from 'react-router-dom';
@@ -14,7 +13,11 @@ import {
 } from '../../services/selectors/orderSelectors';
 import { getUser } from '../../services/selectors/authSelectors';
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
-import { clearConstructor } from '../../services/slices/burgerConstructorSlice';
+import {
+  clearConstructor,
+  removeIngredient,
+  moveIngredient
+} from '../../services/slices/burgerConstructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -55,9 +58,27 @@ export const BurgerConstructor: FC = () => {
       .then(() => {
         dispatch(clearConstructor());
       })
-      .catch((error: any) => {
-        console.error('Ошибка при создании заказа:', error);
-      });
+      .catch((error: any) => {});
+  };
+
+  const handleRemoveIngredient = (id: string) => {
+    dispatch(removeIngredient(id));
+  };
+
+  const handleMoveIngredient = (from: number, to: number) => {
+    dispatch(moveIngredient({ from, to }));
+  };
+
+  const handleMoveUp = (index: number) => {
+    if (index > 0) {
+      handleMoveIngredient(index, index - 1);
+    }
+  };
+
+  const handleMoveDown = (index: number) => {
+    if (index < constructorItems.ingredients.length - 1) {
+      handleMoveIngredient(index, index + 1);
+    }
   };
 
   const closeOrderModal = () => {
@@ -72,6 +93,9 @@ export const BurgerConstructor: FC = () => {
       orderModalData={orderNumber}
       onOrderClick={handleOrderClick}
       closeOrderModal={closeOrderModal}
+      onRemove={handleRemoveIngredient}
+      onMoveUp={handleMoveUp}
+      onMoveDown={handleMoveDown}
     />
   );
 };

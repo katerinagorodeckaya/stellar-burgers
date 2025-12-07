@@ -1,9 +1,10 @@
 import React, { FC, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerIngredientUI } from '../ui/burger-ingredient';
 import { TBurgerIngredientProps } from './type';
+
 import {
   addBun,
   addIngredient
@@ -16,6 +17,7 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = ({
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { bun, ingredients } = useSelector(getConstructorItems);
 
@@ -35,6 +37,11 @@ export const BurgerIngredient: FC<TBurgerIngredientProps> = ({
     } else {
       dispatch(addIngredient(ingredient));
     }
+  };
+  const handleClick = () => {
+    navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location }
+    });
   };
 
   return (

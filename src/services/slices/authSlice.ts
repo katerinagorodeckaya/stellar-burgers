@@ -1,3 +1,4 @@
+import { deleteCookie } from '../../utils/cookie';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   registerUserApi,
@@ -41,12 +42,20 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async () => {
   await logoutApi();
   localStorage.removeItem('refreshToken');
+  deleteCookie('accessToken');
 });
 
-export const getUser = createAsyncThunk('auth/getUser', async () => {
-  const response = await getUserApi();
-  return response.user;
-});
+export const getUser = createAsyncThunk(
+  'auth/getUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getUserApi();
+      return response.user;
+    } catch (error) {
+      return rejectWithValue(null);
+    }
+  }
+);
 
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
@@ -103,6 +112,7 @@ const authSlice = createSlice({
       })
       .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
+        state.user = null;
         state.error =
           action.error.message || 'Ошибка получения данных пользователя';
       })
