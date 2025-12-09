@@ -9,7 +9,7 @@ export const OrdersList: FC<OrdersListProps> = memo(({ orders }) => {
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
       ),
-    [orders] // 👈 Только при изменении orders
+    [orders] 
   );
 
   return <OrdersListUI orderByDate={orderByDate} />;

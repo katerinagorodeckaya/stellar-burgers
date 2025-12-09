@@ -93,6 +93,6 @@ module.exports = {
   static: {
     directory: path.join(__dirname, 'dist'),
   },
-  open: true // автоматически открыть браузер
+  open: true 
 }
 };

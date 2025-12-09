@@ -30,7 +30,7 @@ export const OrderInfo: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<TOrder | null>(null);
 
-  // Эффект для загрузки заказа
+
   useEffect(() => {
     const fetchOrder = async () => {
       if (!number) return;
@@ -78,7 +78,7 @@ export const OrderInfo: FC = () => {
     fetchOrder();
   }, [number, feedOrders, profileOrders, location.pathname, location.state]);
 
-  // Эффект для формирования orderInfo когда есть и заказ и ингредиенты
+  
   useEffect(() => {
     if (orderData && ingredients.length > 0) {
       const ingredientsInfo: {
@@ -115,7 +115,7 @@ export const OrderInfo: FC = () => {
     }
   }, [orderData, ingredients]);
 
-  // Показываем прелоадер только если загружаем заказ ИЛИ ждем ингредиенты
+  
   if (loading || (orderData && ingredients.length === 0)) {
     return <Preloader />;
   }

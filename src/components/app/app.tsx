@@ -33,9 +33,9 @@ const ModalSwitch: FC = () => {
     if (refreshToken) {
       dispatch(getUser());
     }
-    // Загружаем ингредиенты один раз при старте приложения
+
     dispatch(fetchIngredients());
-    // Загружаем ленту заказов сразу при старте приложения
+
     dispatch(fetchFeeds());
   }, [dispatch]);
 

@@ -13,7 +13,7 @@ export const IngredientDetails: FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Сбрасываем loading когда ингредиенты загружены
+
     if (ingredients.length > 0) {
       setLoading(false);
     }
