@@ -1,19 +1,14 @@
-import { ProfileOrdersUI } from '@ui-pages';
-import { Preloader } from '@ui';
-import { FC, useEffect } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
+import React, { FC, useEffect } from 'react';
+import { useSelector, useDispatch } from '../../services/store';
 import { fetchProfileOrders } from '../../services/slices/profileOrdersSlice';
-import {
-  getProfileOrders,
-  getProfileOrdersLoading,
-  getProfileOrdersError
-} from '../../services/selectors';
+import { getProfileOrders } from '../../services/selectors/profileOrdersSelectors';
+import { Preloader } from '@ui';
+import { ProfileOrdersUI } from '@ui-pages';
 
 export const ProfileOrders: FC = () => {
   const dispatch = useDispatch();
   const orders = useSelector(getProfileOrders);
-  const loading = useSelector(getProfileOrdersLoading);
-  const error = useSelector(getProfileOrdersError);
+  const { loading, error } = useSelector((state) => state.profileOrders);
 
   useEffect(() => {
     dispatch(fetchProfileOrders());
@@ -24,9 +19,7 @@ export const ProfileOrders: FC = () => {
   }
 
   if (error) {
-    return (
-      <div className='text text_type_main-default p-10'>Ошибка: {error}</div>
-    );
+    return <div>Ошибка: {error}</div>;
   }
 
   return <ProfileOrdersUI orders={orders} />;

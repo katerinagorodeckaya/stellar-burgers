@@ -10,19 +10,27 @@ import { Preloader } from '../ui';
 export const IngredientDetails: FC = () => {
   const { id } = useParams<{ id: string }>();
   const ingredients = useSelector(getIngredients);
-  const [ingredient, setIngredient] = useState<TIngredient | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (ingredients.length > 0 && id) {
-      const foundIngredient = ingredients.find(
-        (item: TIngredient) => item._id === id
-      );
-      setIngredient(foundIngredient || null);
+    // Сбрасываем loading когда ингредиенты загружены
+    if (ingredients.length > 0) {
+      setLoading(false);
     }
-  }, [ingredients, id]);
+  }, [ingredients]);
+
+  if (loading) {
+    return <Preloader />;
+  }
+
+  if (ingredients.length === 0) {
+    return <div>Ингредиенты не загружены</div>;
+  }
+
+  const ingredient = ingredients.find((item: TIngredient) => item._id === id);
 
   if (!ingredient) {
-    return <Preloader />;
+    return <div>Ингредиент не найден</div>;
   }
 
   return <IngredientDetailsUI ingredientData={ingredient} />;

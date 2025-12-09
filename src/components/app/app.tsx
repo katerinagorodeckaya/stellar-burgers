@@ -20,6 +20,7 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { FC, useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { getUser } from '../../services/slices/authSlice';
+import { fetchIngredients, fetchFeeds } from '../../services/slices';
 
 const ModalSwitch: FC = () => {
   const location = useLocation();
@@ -32,6 +33,10 @@ const ModalSwitch: FC = () => {
     if (refreshToken) {
       dispatch(getUser());
     }
+    // Загружаем ингредиенты один раз при старте приложения
+    dispatch(fetchIngredients());
+    // Загружаем ленту заказов сразу при старте приложения
+    dispatch(fetchFeeds());
   }, [dispatch]);
 
   const handleModalClose = () => {
@@ -126,9 +131,11 @@ const ModalSwitch: FC = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='Детали заказа' onClose={handleModalClose}>
-                <OrderInfo />
-              </Modal>
+              <ProtectedRoute>
+                <Modal title='Детали заказа' onClose={handleModalClose}>
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
             }
           />
         </Routes>

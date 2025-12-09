@@ -1,45 +1,30 @@
+import { FC, useCallback } from 'react';
+import { useSelector, useDispatch } from '../../services/store';
+import { fetchFeeds } from '../../services/slices/feedSlice';
+import {
+  getFeedOrders,
+  getFeedLoading,
+  getFeedError
+} from '../../services/selectors/feedSelectors';
 import { Preloader } from '@ui';
 import { FeedUI } from '@ui-pages';
-import { FC, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from '../../services/store';
-import { fetchFeeds } from '../../services/slices/feedSlice';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
-  const { orders, loading, error } = useSelector((state) => state.feed);
-  const hasFetched = useRef(false);
+  const orders = useSelector(getFeedOrders);
+  const loading = useSelector(getFeedLoading);
+  const error = useSelector(getFeedError);
 
-  useEffect(() => {
-    if (!hasFetched.current) {
-      hasFetched.current = true;
-      dispatch(fetchFeeds());
-    }
-
-    return () => {
-      hasFetched.current = false;
-    };
+  const handleGetFeeds = useCallback(() => {
+    dispatch(fetchFeeds());
   }, [dispatch]);
 
-  const handleGetFeeds = () => {
-    dispatch(fetchFeeds());
-  };
-
-  if (loading) {
+  if (loading && orders.length === 0) {
     return <Preloader />;
   }
 
   if (error) {
-    return (
-      <div className='text text_type_main-default p-10'>
-        <p>Ошибка: {error}</p>
-        <button
-          onClick={handleGetFeeds}
-          className='button button_type_primary mt-4'
-        >
-          Повторить
-        </button>
-      </div>
-    );
+    return <div>Ошибка: {error}</div>;
   }
 
   return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;

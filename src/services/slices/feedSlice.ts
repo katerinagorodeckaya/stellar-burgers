@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getFeedsApi } from '@api';
 import { TOrder } from '@utils-types';
+import { getFeedsApi } from '@api';
 
 type TFeedState = {
   orders: TOrder[];
@@ -31,18 +31,17 @@ const feedSlice = createSlice({
     builder
       .addCase(fetchFeeds.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(fetchFeeds.fulfilled, (state, action) => {
-        state.orders = action.payload.orders;
-        state.total = action.payload.total;
-        state.totalToday = action.payload.totalToday;
         state.loading = false;
-        state.error = null;
+        state.orders = action.payload?.orders || [];
+        state.total = action.payload?.total || 0;
+        state.totalToday = action.payload?.totalToday || 0;
       })
       .addCase(fetchFeeds.rejected, (state, action) => {
         state.loading = false;
-        state.error =
-          action.error.message || 'Ошибка при загрузке ленты заказов';
+        state.error = action.error.message || 'Ошибка при загрузке ленты';
       });
   }
 });

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getOrdersApi } from '@api';
 import { TOrder } from '@utils-types';
+import { getOrdersApi } from '@api';
 
 type TProfileOrdersState = {
   orders: TOrder[];
@@ -25,12 +25,7 @@ export const fetchProfileOrders = createAsyncThunk(
 const profileOrdersSlice = createSlice({
   name: 'profileOrders',
   initialState,
-  reducers: {
-    clearProfileOrders: (state) => {
-      state.orders = [];
-      state.error = null;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchProfileOrders.pending, (state) => {
@@ -39,7 +34,7 @@ const profileOrdersSlice = createSlice({
       })
       .addCase(fetchProfileOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload;
+        state.orders = action.payload || [];
       })
       .addCase(fetchProfileOrders.rejected, (state, action) => {
         state.loading = false;
@@ -49,5 +44,4 @@ const profileOrdersSlice = createSlice({
   }
 });
 
-export const { clearProfileOrders } = profileOrdersSlice.actions;
 export default profileOrdersSlice.reducer;

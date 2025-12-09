@@ -1,7 +1,8 @@
 .burger_ingredients {
   font-family: 'Jet Brains Mono';
   color: #f2f2f3;
-  width: 100%;
+  max-width: 600px;
+
   display: flex;
   flex-direction: column;
 }
@@ -15,9 +16,7 @@ p {
 }
 
 .content {
-  overflow-y: auto;
-  height: calc(100vh - 324px); 
-  max-height: 756px; 
+  overflow-y: scroll;
 }
 
 .menu {

@@ -27,76 +27,101 @@ export const OrderInfo: FC = () => {
     null
   );
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [orderData, setOrderData] = useState<TOrder | null>(null);
 
+  // Эффект для загрузки заказа
   useEffect(() => {
     const fetchOrder = async () => {
       if (!number) return;
 
       setLoading(true);
+      setError(null);
       try {
         let order: TOrder | undefined;
 
-        if (location.pathname.includes('/feed')) {
-          order = feedOrders.find(
-            (item: TOrder) => item.number === parseInt(number)
-          );
-        } else if (location.pathname.includes('/profile/orders')) {
-          order = profileOrders.find(
-            (item: TOrder) => item.number === parseInt(number)
-          );
+        const isModal = location.state?.background;
+
+        if (isModal) {
+          if (location.pathname.includes('/feed')) {
+            order = feedOrders.find(
+              (item: TOrder) => item.number === parseInt(number)
+            );
+          } else if (location.pathname.includes('/profile/orders')) {
+            order = profileOrders.find(
+              (item: TOrder) => item.number === parseInt(number)
+            );
+          }
         }
 
-        if (!order) {
+        if (!order || !isModal) {
           const response = await getOrderByNumberApi(parseInt(number));
           if (response.success && response.orders.length > 0) {
             order = response.orders[0];
           }
         }
 
-        if (order && ingredients.length > 0) {
-          const ingredientsInfo: {
-            [key: string]: TIngredient & { count: number };
-          } = {};
-
-          order.ingredients.forEach((ingredientId: string) => {
-            const ingredient = ingredients.find(
-              (item: TIngredient) => item._id === ingredientId
-            );
-            if (ingredient) {
-              if (ingredientsInfo[ingredientId]) {
-                ingredientsInfo[ingredientId].count += 1;
-              } else {
-                ingredientsInfo[ingredientId] = { ...ingredient, count: 1 };
-              }
-            }
-          });
-
-          const total = Object.values(ingredientsInfo).reduce(
-            (sum: number, item: TIngredient & { count: number }) =>
-              sum + item.price * item.count,
-            0
-          );
-
-          const orderWithInfo: TOrderWithIngredients = {
-            ...order,
-            ingredientsInfo,
-            total,
-            date: new Date(order.createdAt)
-          };
-
-          setOrderInfo(orderWithInfo);
+        if (order) {
+          setOrderData(order);
+        } else {
+          setError('Заказ не найден');
+          setOrderData(null);
         }
       } catch (error) {
+        setError('Ошибка при загрузке заказа');
+        setOrderData(null);
       } finally {
         setLoading(false);
       }
     };
 
     fetchOrder();
-  }, [number, ingredients, feedOrders, profileOrders, location.pathname]);
+  }, [number, feedOrders, profileOrders, location.pathname, location.state]);
 
-  if (loading) {
+  // Эффект для формирования orderInfo когда есть и заказ и ингредиенты
+  useEffect(() => {
+    if (orderData && ingredients.length > 0) {
+      const ingredientsInfo: {
+        [key: string]: TIngredient & { count: number };
+      } = {};
+
+      orderData.ingredients.forEach((ingredientId: string) => {
+        const ingredient = ingredients.find(
+          (item: TIngredient) => item._id === ingredientId
+        );
+        if (ingredient) {
+          if (ingredientsInfo[ingredientId]) {
+            ingredientsInfo[ingredientId].count += 1;
+          } else {
+            ingredientsInfo[ingredientId] = { ...ingredient, count: 1 };
+          }
+        }
+      });
+
+      const total = Object.values(ingredientsInfo).reduce(
+        (sum: number, item: TIngredient & { count: number }) =>
+          sum + item.price * item.count,
+        0
+      );
+
+      const orderWithInfo: TOrderWithIngredients = {
+        ...orderData,
+        ingredientsInfo,
+        total,
+        date: new Date(orderData.createdAt)
+      };
+
+      setOrderInfo(orderWithInfo);
+    }
+  }, [orderData, ingredients]);
+
+  // Показываем прелоадер только если загружаем заказ ИЛИ ждем ингредиенты
+  if (loading || (orderData && ingredients.length === 0)) {
     return <Preloader />;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
   }
 
   if (!orderInfo) {
