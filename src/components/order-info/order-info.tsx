@@ -30,7 +30,6 @@ export const OrderInfo: FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [orderData, setOrderData] = useState<TOrder | null>(null);
 
-
   useEffect(() => {
     const fetchOrder = async () => {
       if (!number) return;
@@ -78,7 +77,6 @@ export const OrderInfo: FC = () => {
     fetchOrder();
   }, [number, feedOrders, profileOrders, location.pathname, location.state]);
 
-  
   useEffect(() => {
     if (orderData && ingredients.length > 0) {
       const ingredientsInfo: {
@@ -115,7 +113,6 @@ export const OrderInfo: FC = () => {
     }
   }, [orderData, ingredients]);
 
-  
   if (loading || (orderData && ingredients.length === 0)) {
     return <Preloader />;
   }

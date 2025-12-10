@@ -13,7 +13,6 @@ export const IngredientDetails: FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
     if (ingredients.length > 0) {
       setLoading(false);
     }

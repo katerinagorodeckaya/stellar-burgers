@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from '../../services/store';
 import { fetchFeeds } from '../../services/slices/feedSlice';
 import {
@@ -18,6 +18,10 @@ export const Feed: FC = () => {
   const handleGetFeeds = useCallback(() => {
     dispatch(fetchFeeds());
   }, [dispatch]);
+
+  useEffect(() => {
+    handleGetFeeds();
+  }, [handleGetFeeds]);
 
   if (loading && orders.length === 0) {
     return <Preloader />;

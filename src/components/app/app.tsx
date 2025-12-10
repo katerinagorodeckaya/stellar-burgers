@@ -35,8 +35,6 @@ const ModalSwitch: FC = () => {
     }
 
     dispatch(fetchIngredients());
-
-    dispatch(fetchFeeds());
   }, [dispatch]);
 
   const handleModalClose = () => {
