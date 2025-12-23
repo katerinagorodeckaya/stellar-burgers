@@ -1,5 +1,21 @@
+export type TOrderFeed = {
+  _id: string;
+  ingredients: string[];
+  status: 'created' | 'pending' | 'done' | 'ready';
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  number: number;
+};
+
 export type FeedInfoUIProps = {
-  feed: any;
+  feed: {
+    total: number;
+    totalToday: number;
+    orders?: TOrderFeed[];
+    isLoading?: boolean;
+    error?: string | null;
+  };
   readyOrders: number[];
   pendingOrders: number[];
 };

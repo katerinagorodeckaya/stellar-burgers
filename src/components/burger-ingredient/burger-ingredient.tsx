@@ -1,22 +1,55 @@
-import { FC, memo } from 'react';
-import { useLocation } from 'react-router-dom';
-
-import { BurgerIngredientUI } from '@ui';
+import React, { FC, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from '../../services/store';
+import { TConstructorIngredient } from '@utils-types';
+import { BurgerIngredientUI } from '../ui/burger-ingredient';
 import { TBurgerIngredientProps } from './type';
 
-export const BurgerIngredient: FC<TBurgerIngredientProps> = memo(
-  ({ ingredient, count }) => {
-    const location = useLocation();
+import {
+  addBun,
+  addIngredient
+} from '../../services/slices/burgerConstructorSlice';
+import { TIngredient } from '@utils-types';
+import { getConstructorItems } from '../../services/selectors/burgerConstructorSelectors';
 
-    const handleAdd = () => {};
+export const BurgerIngredient: FC<TBurgerIngredientProps> = ({
+  ingredient
+}) => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    return (
-      <BurgerIngredientUI
-        ingredient={ingredient}
-        count={count}
-        locationState={{ background: location }}
-        handleAdd={handleAdd}
-      />
-    );
-  }
-);
+  const { bun, ingredients } = useSelector(getConstructorItems);
+
+  const count = useMemo(() => {
+    if (ingredient.type === 'bun') {
+      return bun && bun._id === ingredient._id ? 2 : 0;
+    } else {
+      return ingredients.filter(
+        (item: TConstructorIngredient) => item._id === ingredient._id
+      ).length;
+    }
+  }, [ingredient, bun, ingredients]);
+
+  const handleAdd = () => {
+    if (ingredient.type === 'bun') {
+      dispatch(addBun(ingredient));
+    } else {
+      dispatch(addIngredient(ingredient));
+    }
+  };
+  const handleClick = () => {
+    navigate(`/ingredients/${ingredient._id}`, {
+      state: { background: location }
+    });
+  };
+
+  return (
+    <BurgerIngredientUI
+      ingredient={ingredient}
+      count={count}
+      handleAdd={handleAdd}
+      locationState={{ background: location }}
+    />
+  );
+};
