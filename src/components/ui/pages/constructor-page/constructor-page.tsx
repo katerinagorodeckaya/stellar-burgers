@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 import { BurgerIngredientsUI } from '@ui';
 import { BurgerConstructorUI } from '@ui';
-import { TTabMode } from '@utils-types';
+import { TTabMode, TIngredient } from '@utils-types';
+import { BurgerConstructorUIProps } from '../../burger-constructor/type';
 
 type ConstructorPageUIProps = {
   ingredientsLoading: boolean;
   burgerIngredientsProps: {
     currentTab: TTabMode;
-    buns: any[];
-    mains: any[];
-    sauces: any[];
+    buns: TIngredient[];
+    mains: TIngredient[];
+    sauces: TIngredient[];
     titleBunRef: React.RefObject<HTMLHeadingElement>;
     titleMainRef: React.RefObject<HTMLHeadingElement>;
     titleSaucesRef: React.RefObject<HTMLHeadingElement>;
@@ -18,7 +19,7 @@ type ConstructorPageUIProps = {
     saucesRef: (node?: Element | null | undefined) => void;
     onTabClick: (val: string) => void;
   };
-  burgerConstructorProps: any;
+  burgerConstructorProps: BurgerConstructorUIProps;
 };
 
 export const ConstructorPageUI: FC<ConstructorPageUIProps> = ({

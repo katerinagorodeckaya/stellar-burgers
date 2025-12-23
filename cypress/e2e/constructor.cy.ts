@@ -45,6 +45,13 @@ describe('Stellar Burger Constructor', () => {
         .click({ force: true });
       
       cy.get(SELECTORS.ingredientModal).should('be.visible');
+      
+    
+      cy.get('[data-testid="ingredient-details-name"]').should('contain', 'Краторная булка N-200i');
+      cy.get('[data-testid="ingredient-details-calories"]').should('exist');
+      cy.get('[data-testid="ingredient-details-proteins"]').should('exist');
+      cy.get('[data-testid="ingredient-details-fat"]').should('exist');
+      cy.get('[data-testid="ingredient-details-carbohydrates"]').should('exist');
     });
 
     it('should close modal by clicking close button', () => {

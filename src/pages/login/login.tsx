@@ -24,7 +24,7 @@ export const Login: FC = () => {
       .then(() => {
         navigate(from, { replace: true });
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         setError(err.message || 'Ошибка авторизации');
       });
   };

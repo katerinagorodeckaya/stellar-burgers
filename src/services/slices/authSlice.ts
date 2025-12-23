@@ -71,7 +71,7 @@ const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // register
+
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -84,7 +84,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Ошибка регистрации';
       })
-      // login
+
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -97,11 +97,11 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Ошибка авторизации';
       })
-      // logout
+
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
       })
-      // getUser
+
       .addCase(getUser.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -116,7 +116,7 @@ const authSlice = createSlice({
         state.error =
           action.error.message || 'Ошибка получения данных пользователя';
       })
-      // updateUser
+
       .addCase(updateUser.pending, (state) => {
         state.loading = true;
         state.error = null;

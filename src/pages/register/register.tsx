@@ -22,7 +22,7 @@ export const Register: FC = () => {
       .then(() => {
         navigate('/');
       })
-      .catch((err: any) => {
+      .catch((err: Error) => {
         setError(err.message || 'Ошибка авторизации');
       });
   };

@@ -58,7 +58,7 @@ export const BurgerConstructor: FC = () => {
       .then(() => {
         dispatch(clearConstructor());
       })
-      .catch((error: any) => {});
+      .catch((error: Error) => {});
   };
 
   const handleRemoveIngredient = (id: string) => {

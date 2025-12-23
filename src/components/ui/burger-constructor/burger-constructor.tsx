@@ -89,10 +89,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       </div>
     )}
 
-    <div
-      className={`${styles.total} mt-10 mr-4`}
-      data-testid='total-price' // ← ДОБАВЬТЕ ЭТО
-    >
+    <div className={`${styles.total} mt-10 mr-4`} data-testid='total-price'>
       <div className={`${styles.cost} mr-10`}>
         <p className={`text ${styles.text} mr-2`}>{price}</p>
         <CurrencyIcon type='primary' />
@@ -117,11 +114,11 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
       <Modal
         onClose={closeOrderModal}
         title={orderRequest ? 'Оформляем заказ...' : ''}
-        data-testid='order-modal' // ← ДОБАВЛЕНО
+        data-testid='order-modal'
       >
         <OrderDetailsUI
           orderNumber={orderModalData}
-          data-testid='order-number' // ← ДОБАВЛЕНО
+          data-testid='order-number'
         />
       </Modal>
     )}

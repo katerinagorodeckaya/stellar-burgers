@@ -37,7 +37,6 @@ export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
         </Link>
         <div data-testid={`add-ingredient-${_id}`}>
           {' '}
-          {/* ← ОБЕРТКА с data-testid */}
           <AddButton
             text='Добавить'
             onClick={handleAdd}

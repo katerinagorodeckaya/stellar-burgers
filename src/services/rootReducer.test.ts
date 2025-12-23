@@ -68,7 +68,6 @@ describe('Root Reducer', () => {
 
     const state = rootReducer(undefined as any, { type: 'UNKNOWN_ACTION' });
 
-    // Проверяем каждый слайс отдельно с явным приведением типа
     expect((state as any).ingredients).toEqual({
       ingredients: [],
       loading: false,
